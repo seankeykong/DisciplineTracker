@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Contact List App</title>
+
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" href="/style.css">
+
+</head>
+<body>
+	<div class="container" ng-controller="AppCtrl">
+		<div class="row">
+			<h2 class="text-center">Student Disciplinary Tracker</h2>
+		</div>
+		<button class="btn btn-primary btn-lg" ng-click="deselect()" data-toggle="modal" data-target="#newIncidentForm">New Incident</button>
+		
+
+		<!--New Incident Modal-->
+	<div class="modal fade" id="newIncidentForm" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">New Incident</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.lastName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Grade" ng-model="incident.grade">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Date" ng-model="incident.date">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Nature" ng-model="incident.nature">
+						</div>
+					</div>
+					<!--Others Involved
+					<h4>Other Students Involved</h4>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.othersInvolved[0].firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.othersInvolved[0].lastName">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.othersInvolved[1].firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.othersInvolved[1].lastName">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.othersInvolved[2].firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.othersInvolved[2].lastName">
+						</div>
+					</div>-->
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<div class="form-group">
+  								<textarea class="form-control" rows="5" id="description" ng-model="incident.description" placeholder="Description"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Statement" ng-model="incident.statement">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Consequences" ng-model="incident.consequences">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-6">
+							<input type="text" class="form-control" placeholder="Parent Phone" ng-model="incident.parentPhone">
+						</div>
+						<div class="col-md-6">
+							<input type="text" class="form-control" placeholder="Parent Email" ng-model="incident.parentEmail">
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+        			<button type="button" class="btn btn-primary" ng-click="addIncident()" data-dismiss="modal">Save</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>		
+		</div>
+	</div>
+
+<!--displayIncident modal-->
+	<div class="modal fade" id="displayIncident" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>{{incident.firstName+' '+incident.lastName}}</h3>
+					<h4>{{incident.date | date : 'shortDate'}}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4">
+							<h4>Grade</h4>
+							<p>{{incident.grade}}</p>
+						</div>
+						<div class="col-md-8">
+							<h4>Nature</h4>
+							<p>{{incident.nature}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Description</h4>
+							<p>{{incident.description}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Statement</h4>
+							<p>{{incident.statement}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Consequences</h4>
+							<p>{{incident.consequences}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<h4>Parent Phone</h4>
+							<p>{{incident.parentPhone}}</p>
+						</div>
+						<div class="col-md-6">
+							<h4>Parent Email</h4>
+							<p>{{incident.parentEmail}}</p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--editIncident Modal-->
+<div class="modal fade" id="editIncident" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit Incident</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.lastName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Grade" ng-model="incident.grade">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Date" ng-model="incident.date | date:'shortDate'">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Nature" ng-model="incident.nature">
+						</div>
+					</div>
+					<!--Others Involved
+					<h4>Other Students Involved</h4>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.othersInvolved[0].firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.othersInvolved[0].lastName">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.othersInvolved[1].firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.othersInvolved[1].lastName">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="First Name" ng-model="incident.othersInvolved[2].firstName">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.othersInvolved[2].lastName">
+						</div>
+					</div>-->
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<div class="form-group">
+  								<textarea class="form-control" rows="5" id="description" ng-model="incident.description" placeholder="Description"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Statement" ng-model="incident.statement">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Consequences" ng-model="incident.consequences">
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-6">
+							<input type="text" class="form-control" placeholder="Parent Phone" ng-model="incident.parentPhone">
+						</div>
+						<div class="col-md-6">
+							<input type="text" class="form-control" placeholder="Parent Email" ng-model="incident.parentEmail">
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+        			<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="update()">Save</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>		
+		</div>
+	</div>
+
+<!--removeIncident modal-->
+	<div class="modal fade" id="removeIncident" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<div class="modal-body text-center">
+						<h4>Are you sure?</h4>
+					</div>
+					<button type="button" class="btn btn-sm btn-danger" ng-click="remove(incident._id)" data-dismiss="modal">Remove</button>
+					<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--Body
+	<div class="row" ng-repeat="incident in incidents">
+		<div class="col-md-2">{{incident.firstName+' '+incident.lastName}}</div>
+		<div class="col-md-2">{{incident.grade}}</div>
+		<div class="col-md-3 col-md-offset-5">
+			<button class='btn btn-info' ng-click='edit(incident._id)' data-toggle="modal" data-target="#displayIncident">Info</button>
+			<button class='btn btn-danger' ng-click='remove(incident._id)'>Remove</button>
+		</div>
+	</div>-->
+
+	<table class="table table-condensed top-buffer">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Date of Incident</th>
+				<th>Student Name</th>
+				<th>Grade</th>
+				<th>Nature of Incident</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody ng-repeat="incident in incidents | orderBy:'-date'">
+			<tr>
+				<th scope="row"></th>
+				<td>{{incident.date | date : 'shortDate'}}</td>
+				<td>{{incident.firstName+' '+incident.lastName}}</td>
+				<td>{{incident.grade}}</td>
+				<td>{{incident.nature}}</td>
+				<td>
+					<button class='btn btn-info' ng-click='edit(incident._id)' data-toggle="modal" data-target="#displayIncident">Info</button>&nbsp;&nbsp;
+					<button class='btn btn-primary' ng-click='edit(incident._id)' data-toggle="modal" data-target="#editIncident">Edit</button>&nbsp;&nbsp;
+					<button class='btn btn-danger' ng-click='edit(incident._id)' data-toggle="modal" data-target="#removeIncident">Remove</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+<!--
+		<div class="row">
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="First Name" ng-model="incident.firstName">
+			</div>
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Last Name" ng-model="incident.lastName">
+			</div>
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Grade" ng-model="incident.grade">
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Date" ng-model="incident.date">
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<input type="text" class="form-control" placeholder="Nature" ng-model="incident.nature">
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<div class="form-group">
+						<label for="description">Description:</label>
+						<textarea class="form-control" rows="5" id="description" ng-model="incident.description"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<input type="text" class="form-control" placeholder="Statement" ng-model="incident.statement">
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<input type="text" class="form-control" placeholder="Consequences" ng-model="incident.consequences">
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-6">
+				<input type="text" class="form-control" placeholder="Parent Phone" ng-model="incident.parentPhone">
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" placeholder="Parent Email" ng-model="incident.parentEmail">
+			</div>
+		</div>
+		<button class="btn btn-primary" ng-click="addIncident()">Add Incident</button>
+
+-->
+
+		<!--<table class="table">
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Grade</th>
+					<th>Action</th>
+					<th>&nbsp;</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" ng-model="incident.firstName"></td>
+					<td><input class="form-control" ng-model="incident.lastName"></td>
+					<td><input class="form-control" ng-model="incident.grade"></td>
+				</tr>
+				<tr>
+					<td><input class="form-control" ng-model="incident.date"></td>
+					<td><input class="form-control" ng-model="incident.nature"></td>
+				</tr>
+				<tr>
+					<td><textarea class="form-control" ng-model="incident.description"></textarea></td>
+					<td></td>
+					<td><button class='btn btn-info' ng-click='update()'>Update</button></td>
+				</tr>
+			</thead>
+			<tbody ng-repeat="incident in incidents">
+				<tr>
+					<td>{{incident.firstName}}</td>
+					<td>{{incident.lastName}}</td>
+					<td>{{incident.grade}}</td>
+				</tr>
+				<tr>
+					<td>{{incident.date}}</td>
+					<td>{{incident.nature}}</td>
+				</tr>
+				<tr>
+					<td>{{incident.description}}</td>
+					<td><button class='btn btn-warning' ng-click='edit(incident._id)'>Edit</button></td>
+					<td><button class='btn btn-danger' ng-click='remove(incident._id)'>Remove</button></td>
+				</tr>
+			</tbody>
+		</table>-->
+
+	</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+<script src="controllers/controller.js"></script>
+
+</body>
+</html>
+
